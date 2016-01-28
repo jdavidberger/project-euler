@@ -8,4 +8,6 @@ primeFactors n = factor n primes
         | n `mod` p == 0 = p : factor (n `div` p) (p:ps)
         | otherwise      = factor n ps
  
-prob3 = last (primeFactors 317584931803)
+prob3 = last (primeFactors 600851475143)
+
+main = print prob3

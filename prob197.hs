@@ -12,3 +12,4 @@ log_f x = ((fromIntegral.floor) (pwer - (x*x))) - divisor
 lu = 0 : map log_f lu
 u = 1.0 : map f u
 
+main = print ":("

@@ -14,9 +14,8 @@ def factor(target):
     elif s == 1:
         return []
     else:
-        print s, target / s
         return factor(s) + factor(target/s)
 
-#t = 600851475143
-t = 1396755360
-print factor(t)
+t = 600851475143
+#t = 1396755360
+print max(factor(t))

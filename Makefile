@@ -5,11 +5,11 @@ bin/%: %.hs
 
 answer/%: prob%.py
 	@echo "Solving for $@"
-	@time -f %e python2 $< > $@
+	@time -f %e timeout --foreground 120 python2 $< > $@
 
 answer/%: bin/prob%
 	@echo "Solving for $@"
-	@time -f %e ./$< > $@
+	@time -f %e timeout --foreground 60 ./$< > $@
 
 problist:=$(shell ls -1 prob* | grep [0-9]* -o | xargs -I{} printf "answer/%s " {})
 

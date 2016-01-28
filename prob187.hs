@@ -15,3 +15,5 @@ limit = 100000000
 prob187 l =  
     let semiprimes s = takeWhile (<l) $ map (*s) (takeWhile (<=s) primes) in
     length $ concat $ takeWhile (/=[]) (map semiprimes (dropWhile (<1000) primes))
+
+main = print $ prob187 limit

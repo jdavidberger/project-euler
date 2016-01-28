@@ -35,3 +35,5 @@ squarefree s =
     where factors = primeFactors s
 
 sprimes = map (^2) primes
+
+main = print $ sum prob203
