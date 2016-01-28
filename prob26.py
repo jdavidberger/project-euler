@@ -20,5 +20,5 @@ if __name__=='__main__':
         l = tail(i)
         if l > best[0]:
             best = (l,i)
-    print best
+    print best[1]
     

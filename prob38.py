@@ -17,6 +17,5 @@ if __name__=="__main__":
         score = isFixedPandigital(i)
         if score > best[0]:
             best = (score, i)
-            print best
-    print best
+    print best[0]
     

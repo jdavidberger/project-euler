@@ -40,4 +40,4 @@ prob123 = head $ filter ((>=lim).r) $
           dropWhile (\(n,p) -> p < lsqrt)  $ zip [1..] primes 
 
     
-main = putStrLn $ show $ prob123
+main = putStrLn $ show $ fst prob123

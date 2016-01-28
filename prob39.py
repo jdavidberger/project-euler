@@ -16,4 +16,4 @@ if __name__=='__main__':
     for i in range(1000):
         if bins[i] > best[0]:
             best = (bins[i], i)
-            print best
+    print best[1]

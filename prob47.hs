@@ -23,5 +23,5 @@ prob47 n =
                let y = [x..x+n-1], 
                n_dist n (map (nub . primeFactors) y)]
 
-
+main = print $ prob47 4
                

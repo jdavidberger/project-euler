@@ -22,5 +22,7 @@ prob124 n = (sortBy (\x y->
                       (map (\x -> (rad x, x)) [1..n]))
           where cmp a b = if a < b then LT else if a > b then GT else EQ
 
-    
-main = putStrLn $ show $ prob124 10000
+limit = 100000
+want  =  10000
+
+main = putStrLn $ show $ snd $ (!! (want-1)) $ prob124 limit

@@ -12,9 +12,6 @@ def isPrime(x):
 if __name__=='__main__':
     acc = 0
     for t in range(2,2000000):
-        if t % 100000 == 0:
-            print t
-            if isPrime(t):
-                acc = acc + t
-
+        if isPrime(t):
+            acc = acc + t
     print acc

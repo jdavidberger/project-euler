@@ -14,4 +14,4 @@ prob57 =
           k (-2) = 1
           k n = (a n) * k (n-1) + k (n-2)
 
-    
+main = print prob57

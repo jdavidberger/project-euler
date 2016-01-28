@@ -7,6 +7,10 @@ eex = ns
 
 adddigits 0 = 0
 adddigits x = (mod x 10) + (adddigits (div x 10))
- 
+
+
+target = 100
 prob65 = 
-    adddigits (eex !! 1001)
+    adddigits (eex !! (target - 1))
+
+main = print prob65
