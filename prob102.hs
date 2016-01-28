@@ -1,7 +1,7 @@
 module Main where
 
 import Data.List
-import Char
+import Data.Char
 
 -- | String split in style of python string.split()
 split :: String -> String -> [String]
@@ -48,5 +48,7 @@ prob102 input = show $ length (filter thru_origin2 mynumbers)
       mypoints [a,b,c,d,e,f] = [(a,b),(c,d),(e,f)]
 
 
-main = interact (prob102)
+main = do
+     input <- readFile "triangles.txt"
+     print $ prob102 input
     

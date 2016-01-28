@@ -1,5 +1,5 @@
 
-import Ratio
+import Data.Ratio
 import Debug.Trace
 
 lineqnslv [ [ c, d ] ] =
@@ -35,4 +35,5 @@ prob101 =
     sum $ map (\i-> approx (take i t) !! i) [1..10]
         where
           t = prob101f
-    
+
+main = print prob101

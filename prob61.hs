@@ -1,6 +1,6 @@
 module Main where
 
-import List
+import Data.List
 
 p :: Int -> [Int]
 p x = map (\n -> n * ( (x-2) * n + (4-x)) `div` 2) [1,2..]

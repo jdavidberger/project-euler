@@ -1,6 +1,6 @@
 module Main where
 
-import List
+import Data.List
 
 isPan x = (sort x) == "123456789"
 

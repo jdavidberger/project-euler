@@ -11,3 +11,6 @@ r a = map (\n -> (as1^n + ap1^n) `mod` a2) [0..]
 
 prob120 = sum (map (maxlist.period) [3..1000])
           where maxlist = foldl1 max
+
+    
+main = putStrLn $ show $ prob120

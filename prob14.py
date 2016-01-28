@@ -30,7 +30,6 @@ def ncollLength(x):
     cnt = 1
     while x != 1:
         cnt = cnt + 1
-        print x
         x = iter(x)
     return cnt
 
@@ -38,12 +37,8 @@ ans = 0
 winner = 0
 
 for i in range(1,1000000):
-    if i % 100000 == 0:
-        print i
     o, ans = ans, max(ans, collLength(i))
     if ans != o:
         winner = i
-        print ans, i
-        
 
 print winner

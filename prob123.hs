@@ -36,5 +36,8 @@ r (n,p) = c
 lim = 10000000000
 lsqrt = (floor.sqrt) (fromIntegral lim)
 
-prob120 = head $ filter ((>=lim).r) $ 
+prob123 = head $ filter ((>=lim).r) $ 
           dropWhile (\(n,p) -> p < lsqrt)  $ zip [1..] primes 
+
+    
+main = putStrLn $ show $ prob123

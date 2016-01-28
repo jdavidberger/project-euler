@@ -19,3 +19,5 @@ p_count rows divby =
           total - ndivby
         
 test rows divby = (p_count rows divby, p_count2 rows divby)
+
+main = print ":("
