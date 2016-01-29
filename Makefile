@@ -2,6 +2,11 @@ default: all-answers
 
 .SECONDARY:
 
+answer/%: prob%/src/main.rs
+	cd prob$* && cargo build --release
+	@time -o $@.time -f %e timeout --foreground 60 ./prob$*/target/release/prob$* > $@
+	@cat $@ $@.time | xargs printf "%s in %ss\n"
+
 bin/%: %.hs
 	@ghc $< -o $@ -odir bin 2>&1 > $@.log
 

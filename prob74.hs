@@ -22,8 +22,11 @@ uniques = concat $ map (\n -> map (\x -> (x,n+1)) $ all_pow n) [0..]
 
 all_pow :: Int -> [Int]
 all_pow n = concat $ map (\d -> powers d n) [1..9]
---powers 0 n = [ 0 ]
+
 powers d 0 = [d]
 powers d n = map (+(d * 10 ^ n)) (concat $ map (\d2 -> powers d2 (n-1)) [0..d])
 
-prob74 = filter (\(a,n) -> period a == 60) (takeWhile (\(a,n) -> a <= 1000000) uniques)
+limit = 1000000
+prob74 = filter (\(a,n) -> period a == 60) (takeWhile (\(a,n) -> a <= limit) uniques)
+
+main = print $ length prob74
