@@ -1,0 +1,6 @@
+[package]
+name = "prob89"
+version = "0.1.0"
+authors = ["Justin Berger <j.david.berger@gmail.com>"]
+
+[dependencies]
