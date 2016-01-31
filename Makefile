@@ -10,6 +10,9 @@ answer/%: prob%/src/main.rs
 bin/%: %.hs
 	@ghc -O2 $< -o $@ -odir bin 2>&1 > $@.log
 
+bin/%: %.cc
+	@g++ -std=c++11 -O2 $< -o $@ 2>&1 > $@.log
+
 answer/%: bin/prob%
 	@echo "Solving for $*"
 	@time -o $@.time -f %e timeout --foreground 60 ./$< > $@
