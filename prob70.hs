@@ -5,7 +5,7 @@ primes = 2 : filter ((==1) . length . primeFactors) [3,5..]
 nearlyPrimes limit =
   let seperatedBy n =
         reverse $ takeWhile (\(x,y) -> x*y < limit) $ zip (drop n primes) primes in
-   sortBy (\(x,y)->x*y) $ concat $ takeWhile (not.null) $ map seperatedBy [1..]
+    concat $ takeWhile (not.null) $ map seperatedBy [1..]
 
 primeFactors n = factor n primes
   where

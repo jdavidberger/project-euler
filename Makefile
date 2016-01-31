@@ -8,7 +8,7 @@ answer/%: prob%/src/main.rs
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
 bin/%: %.hs
-	@ghc $< -o $@ -odir bin 2>&1 > $@.log
+	@ghc -O2 $< -o $@ -odir bin 2>&1 > $@.log
 
 answer/%: bin/prob%
 	@echo "Solving for $*"
