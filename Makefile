@@ -14,12 +14,22 @@ bin/%: %.cc
 	@g++ -std=c++11 -O2 $< -o $@ 2>&1 > $@.log
 
 answer/%: bin/prob%
-	@echo "Solving for $*"
+	@echo "Solving for $* (binary)"
 	@time -o $@.time -f %e timeout --foreground 60 ./$< > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
+answer/%: prob%.scala
+	@echo "Solving for $* (scala)"
+	@time -o $@.time -f %e timeout --foreground 60 scala ./$< > $@
+	@cat $@ $@.time | xargs printf "%s in %ss\n"
+
+answer/%: prob%.jl
+	@echo "Solving for $* (julia)"
+	@time -o $@.time -f %e timeout --foreground 120 julia $< > $@
+	@cat $@ $@.time | xargs printf "%s in %ss\n"
+
 answer/%: prob%.py
-	@echo "Solving for $*"
+	@echo "Solving for $* (python)"
 	@time -o $@.time -f %e timeout --foreground 120 python2 $< > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
