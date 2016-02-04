@@ -1,5 +1,6 @@
 module Euler where
 import Debug.Trace
+import Data.Ratio
 
 (^!) x n = x^n
   
@@ -54,3 +55,24 @@ memo1 arg_to_index index_to_arg f = (\n -> index nats (arg_to_index n))
 memoNat = memo1 id id
 memoNat2 :: (Integer -> Integer -> Integer) -> (Integer -> Integer -> Integer)
 memoNat2 f = memoNat (\n -> memoNat (f n))
+
+
+binom n k =
+  let fn i = (n + 1 - i)
+      fd i = i
+      k' = if k > (n `div` 2) then (n-k) else k
+  in (product $ map fn [1..k']) `div` (product $ map fd [1..k'])
+
+bernoulli =
+  let
+    f lst n =
+        let newLst = lst ++ [ 1 % (n+1) ]
+            g (idx1,aj1) (idx,aj) =
+              res where res = (idx1, (idx % 1) * (aj1 - aj))
+            newLst1 =
+              scanr1 g $
+              zip [0..] newLst
+            newLst2 =
+              (map snd newLst1)
+        in newLst2
+  in map head $ drop 1 $ scanl f [] [0..]
