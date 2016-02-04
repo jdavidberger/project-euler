@@ -13,6 +13,9 @@ bin/%: %.hs
 bin/%: %.cc
 	@g++ -std=c++11 -O2 $< -o $@ 2>&1 > $@.log
 
+bin/%: %.c
+	@gcc -std=c11 -O2 $< -o $@ 2>&1 > $@.log
+
 answer/%: bin/prob%
 	@echo "Solving for $* (binary)"
 	@time -o $@.time -f %e timeout --foreground 60 ./$< > $@
