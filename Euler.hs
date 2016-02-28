@@ -1,6 +1,8 @@
 module Euler where
 import Debug.Trace
 import Data.Ratio
+import Data.List
+import qualified Data.Map as Map
 
 (^!) x n = x^n
   
@@ -29,8 +31,19 @@ cubeRoot n =
 
 isPrime = ((==1).length.primeFactors)
 
+primePowers n = [(head x, length x) | x <- group $ primeFactors n]
+
 primes = 2 : filter ((==1) . length . primeFactors) [3,5..]
- 
+
+fromPrimePowers pws =
+  product [ p^k | (p,k) <- pws]
+
+divisorsPP pp = 
+  init $ sequence [take (k+1) $ iterate (p*) 1 | (p,k) <- pp]
+
+divisors n = takeWhile (<n) $ map product $ sequence
+                    [take (k+1) $ iterate (p*) 1 | (p,k) <- primePowers n]
+
 primeFactors n = factor n primes
   where
     factor n (p:ps) 
@@ -52,10 +65,27 @@ memo1 arg_to_index index_to_arg f = (\n -> index nats (arg_to_index n))
               (i',0) -> index l i'
               (i',1) -> index r i'
 
+memoNat :: Integral a => (a -> b) -> a -> b
 memoNat = memo1 id id
-memoNat2 :: (Integer -> Integer -> Integer) -> (Integer -> Integer -> Integer)
+
 memoNat2 f = memoNat (\n -> memoNat (f n))
 
+modProduct m =
+  let pr a b =
+        let an = numerator a
+            bn = numerator b
+            ad = denominator a
+            bd = denominator b
+        in (an * bn) % (ad * bd)
+      p a b = (a `mod` m) * (b `mod` m) `mod` m    
+  in foldl pr 1
+
+binom_mod m n k = 
+  let fn i = (n + 1 - i)
+      fd i = i
+      f  i = (fn i) % (fd i)
+      k' = if k > (n `div` 2) then (n-k) else k
+  in mod (numerator $ product $ map f [1..k']) m
 
 binom n k =
   let fn i = (n + 1 - i)
@@ -76,3 +106,14 @@ bernoulli =
               (map snd newLst1)
         in newLst2
   in map head $ drop 1 $ scanl f [] [0..]
+
+frequency xs = (Map.fromListWith (+) [(x, 1) | x <- xs])
+
+prime_count_iter (n, last_prime, prime_count) p =
+  ((p - last_prime), p, prime_count + 1)
+
+prime_count =
+  let f (n,_,c) = take n $ repeat (c-1) in
+  concat $ map f $ scanl prime_count_iter (0,0,0) primes
+
+factorial n = product [1..n]                                                             

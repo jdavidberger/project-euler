@@ -7,11 +7,20 @@ answer/%: prob%/src/main.rs
 	@time -o $@.time -f %e timeout --foreground 60 ./prob$*/target/release/prob$* > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
-bin/%: %.hs
-	@ghc -O2 $< -o $@ -odir bin 2>&1 > $@.log
+bin/prob529: prob529.cc
+	@g++ -std=c++14 -Wall -O3 -march=native $< -o $@ -lopenblas -DARMA_DONT_USE_WRAPPER -DARMA_USE_U64S64 -llapack -lflint 2>&1 > $@.log
 
-bin/%: %.cc
-	@g++ -std=c++11 -O2 $< -o $@ 2>&1 > $@.log
+bin/%.d: %.cc
+	@g++ -std=c++14 -Wall -g -O0 $< -o $@ 2>&1 > $@.log
+
+bin/%: %.cc Euler.h
+	@g++ -std=c++14 -Wall -O3 $< -o $@ 2>&1 > $@.log
+
+bin/%.prof: %.hs Euler.hs
+	@ghc -prof -fprof-auto -rtsopts -O2 $< -o $@ -odir bin 2>&1 > $@.log
+
+bin/%: %.hs Euler.hs
+	@ghc -O2 $< -o $@ -odir bin 2>&1 > $@.log
 
 bin/%: %.c
 	@gcc -std=c11 -O2 $< -o $@ 2>&1 > $@.log

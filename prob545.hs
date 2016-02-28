@@ -3,13 +3,10 @@ import Debug.Trace
 import Data.Ratio
 import Data.Fixed
 import Data.Array
-import qualified Data.Map as Map
 import Data.List
+import qualified Data.Map as Map
 
 import Euler
-
-frequency xs = (Map.fromListWith (+) [(x, 1) | x <- xs])
-
 
 -- After you read through all the stuff about the n^k stuff, it
 -- turns out you need none of it. The real question is at which
