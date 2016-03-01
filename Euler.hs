@@ -4,6 +4,8 @@ import Data.Ratio
 import Data.List
 import qualified Data.Map as Map
 
+import Math.Combinatorics.Exact.Binomial
+
 (^!) x n = x^n
   
 squareRoot 0 = 0
@@ -27,8 +29,6 @@ cubeRoot n =
       isRoot r  =  r^!3 <= n && n < (r+1)^!3
   in  head $ dropWhile (not . isRoot) iters
 
-
-
 isPrime = ((==1).length.primeFactors)
 
 primePowers n = [(head x, length x) | x <- group $ primeFactors n]
@@ -43,6 +43,16 @@ divisorsPP pp =
 
 divisors n = takeWhile (<n) $ map product $ sequence
                     [take (k+1) $ iterate (p*) 1 | (p,k) <- primePowers n]
+
+binsearch :: (Int -> Int) -> Int -> Int -> Int -> Int
+binsearch f target low high
+  | high < low       = mid
+  | val > target  = binsearch f target low (mid-1)
+  | val < target  = binsearch f target (mid+1) high
+  | otherwise        = mid
+  where
+    mid = low + ((high - low) `div` 2)
+    val = f mid
 
 primeFactors n = factor n primes
   where

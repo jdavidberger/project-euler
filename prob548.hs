@@ -16,14 +16,16 @@ ppUnder n pl max =
 limit = (10^16)
 primeSigs = ppUnder limit primes 60
 
-min_equiv 1 = 1
-min_equiv n =
+min_equiv' 1 = 1
+min_equiv' n =
   fromPrimePowers $ zip primes $ map snd $ primePowers n
+
+min_equiv = memoNat min_equiv'
   
 gozinta' 1 = 1
 gozinta' n = sum $ map gozinta $ divisors n
 
-gozinta = memoNat (gozinta')
+gozinta = memoNat (gozinta'.min_equiv)
 
 prob548_filter 1 = False
 prob548_filter n =

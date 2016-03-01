@@ -1,17 +1,21 @@
+import Debug.Trace
 
-isPrime x = ((==1).length.primeFactors)
+import Euler
+import Data.Map (Map)
+import qualified Data.Map as Map
+import Data.Maybe
+import Data.List
 
-primes = 2 : filter ((==1) . length . primeFactors) [3,5..]
- 
-primeFactors n = factor n primes
-  where
-    factor n (p:ps) 
-        | p*p > n        = [n]
-        | n `mod` p == 0 = p : factor (n `div` p) (p:ps)
-        | otherwise      = factor n ps
+p' 0 _ = 1
+p' n m =
+  let myPrimes = takeWhile (<=m) primes
+      f k = p (n-k) k
+  in if n < 0 then 0 else sum $ map f myPrimes
 
+p = memoNat2 p'
 
-sums 3 = [[]]
-sums 2 = [[]]
-sums x = map (\x - (filter (isPrime.(x-)) lps
-    lps = dropWhile (<x`div`2) (takeWhile (<x) primes)
+p_ n = p n n
+
+prob77 = (binsearch p_ 5000 1 100) + 1
+
+main = print prob77
