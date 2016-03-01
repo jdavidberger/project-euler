@@ -1,18 +1,34 @@
+import Euler
+
+import qualified Data.Map as Map
+
 isEven n = (n `mod` 2) == 0
+isOdd n = (n `mod` 2) == 1
 
-fib = 1 : 1 : zipWith (+) fib (tail fib)
+limit = 1500000
 
+triples = 
+  let pred = ((<=limit).sum)
+      relTriples = py_trips
+      tripleFamily [a,b,c] = takeWhile pred $ map (\m -> [m*a,m*b,m*c]) [1..]
+  in  concat $ map tripleFamily relTriples
 
-limit = 2000000
+prob75 =
+  length $ filter (\(a,b) -> b == 1) $
+  Map.toList $
+  frequency $ map sum $ triples
 
-prob75 = ans --map ans [1..10]
-
-sqrs = map (\x -> [x,x^2]) [1..]
-
-ans :: [[Integer]]
-ans = [ [a,b,c] |  [c,cs] <- takeWhile ((<=limit`div`2).head) sqrs,
-                   [a,as] <- takeWhile ((<=c).head) sqrs,
-                   [b,bs] <- dropWhile ((<=c-a).head) (takeWhile ((<=a).head) sqrs),
-                   cs == as + bs]
-                 
+py_trips =
+  [ [a,b,c] | m <- [0..squareRoot limit], 
+              n <- [0..m-1],
+              let a = m*m - n*n
+                  b = 2 * m *n
+                  c = m*m + n*n,
+              a > 0 && b > 0 && c > 0,
+              isEven m || isEven n,
+              gcd m n == 1,
+              isOdd (m - n),
+              a + b + c <= limit
+            ]
+          
 main = print prob75
