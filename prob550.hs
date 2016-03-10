@@ -8,53 +8,52 @@ import Data.List
 
 split n = [ filter (>1) [a, b] | a <- [1..n-1], b <- [1..n-1] ]
 
-continuations lst' = 
-  let mix idx = [ sp ++ (take idx lst) ++ (drop (idx+1) lst) |
+continuations lst' =
+  let mix idx = [ sort $ sp ++ (take idx lst) ++ (drop (idx+1) lst) |
                   sp <- split $ lst !! idx ]
       lst = filter (>1) lst'
-      combos = concat $ map mix [0..(length lst)-1]
+      sf a b = compare (length a) (length b)
+      combos = sortBy sf $ nub $ concat $ map mix [0..(length lst)-1]
   in combos
 
-canWin' :: [Int] -> Bool
-canWin' [] = False
-canWin' lst =
+canWinF'' :: [Integer] -> Bool
+canWinF'' [] = False
+canWinF'' lst =
   let c = continuations lst
   in if length c == 0 then True
-     else traceShow lst $ any (not.canWin) c
+     else any (not.canWinF) c
 
-key :: [Int] -> Int
+canWinF' lst= canWinF'' (filter (>1) lst)
+
+key :: [Integer] -> Integer
 key lst' =
-  let lst = sort lst'
+  let lst = reverse $ sort lst'
   in product $ zipWith (^) primes lst
 
 unkey n =
   let pp = primePowers n
       ppm = Map.fromList pp
       mx = fst $ maximum $ pp
-      f i = Map.findWithDefault 0 i ppm 
+      f i = Map.findWithDefault 0 i ppm
   in map f $ takeWhile (<=mx) primes
 
-canWin :: [Int] -> Bool
-canWin = memo1 key unkey canWin'
+canWinF :: [Integer] -> Bool
+canWinF = memo1 key unkey canWinF'
+
+canWin lst = canWinF $ map (sum.(map snd).primePowers) lst
 
 c n k = (n-1)^k
 
+combos n 0 = [[]]
+combos n k =
+  [ (f : lst) | f <- [2..n], lst <- combos n (k-1)]
+
+f n k =
+  filter canWin $ combos n k
 
 char n =  map (sum.(map snd)) $ map primePowers [2..n]
 
-f' n 1 = length $ filter (>1) $ char n
-f' n k =
-  let ch = char n
-      z 1 = f n (k-1)
-      z 2 = l n (k-1)
-      z _ = c n (k-1)
-  in traceShow (n,k,map z ch,ch) $ sum $ map z ch
-
-f = memoNat2 f'
-
-l n k = (c n k) - (f n k)
-
 prob550 =
   0
-  
+
 main = print $ prob550

@@ -29,28 +29,29 @@ cubeRoot 2 = 1
 cubeRoot n =
   let threepows = 1 : iterate (^!3) 3
       (lowerRoot, lowerN) = last $ takeWhile ((n>=) . snd) $ zip (1:threepows) threepows
-      newtonStep x = (2*x + (div n (x*x)) ) `div` 3 
+      newtonStep x = (2*x + (div n (x*x)) ) `div` 3
       iters = iterate newtonStep (cubeRoot (div n lowerN) * lowerRoot)
       isRoot r  =  r^!3 <= n && n < (r+1)^!3
   in  head $ dropWhile (not . isRoot) iters
 
 isPrime = ((==1).length.primeFactors)
 
-primePowers n = [(head x, length x) | x <- group $ primeFactors n]
+primePowers :: Integer -> [(Integer, Integer)]
+primePowers n = [(head x, toInteger $ length x) | x <- group $ primeFactors n]
 
 primes = 2 : filter ((==1) . length . primeFactors) [3,5..]
 
 fromPrimePowers pws =
   product [ p^k | (p,k) <- pws]
 
-divisorsPP pp = 
+divisorsPP pp =
   init $ sequence [take (k+1) $ iterate (p*) 1 | (p,k) <- pp]
 
 divisors n = takeWhile (<n) $ map product $ sequence
-                    [take (k+1) $ iterate (p*) 1 | (p,k) <- primePowers n]
+                    [take (fromInteger (k+1)) $ iterate (p*) 1 | (p, k) <- primePowers n]
 
 binsearch_range f high =
-  let p = head $ filter ((>=high).f.(2^)) $ [1..] 
+  let p = head $ filter ((>=high).f.(2^)) $ [1..]
   in (2^(p-1), 2^p)
 
 binsearch' f target =
@@ -67,9 +68,10 @@ binsearch f target low high
     mid = low + ((high - low) `div` 2)
     val = f mid
 
+primeFactors :: Integer -> [Integer]
 primeFactors n = factor n primes
   where
-    factor n (p:ps) 
+    factor n (p:ps)
         | p*p > n        = [n]
         | n `mod` p == 0 = p : factor (n `div` p) (p:ps)
         | otherwise      = factor n ps
@@ -101,10 +103,10 @@ modProduct m =
             ad = denominator a
             bd = denominator b
         in (an * bn) % (ad * bd)
-      p a b = (a `mod` m) * (b `mod` m) `mod` m    
+      p a b = (a `mod` m) * (b `mod` m) `mod` m
   in foldl pr 1
 
-binom_mod m n k = 
+binom_mod m n k =
   let fn i = (n + 1 - i)
       fd i = i
       f  i = (fn i) % (fd i)
@@ -137,7 +139,7 @@ prime_count_iter (n, last_prime, prime_count) p =
   ((p - last_prime), p, prime_count + 1)
 
 prime_count =
-  let f (n,_,c) = take n $ repeat (c-1) in
+  let f (n,_,c) = take (fromInteger n) $ repeat (c-1) in
   concat $ map f $ scanl prime_count_iter (0,0,0) primes
 
 factorial n = product [1..n]
@@ -147,7 +149,7 @@ isEven n = (n `mod` 2) == 0
 isOdd n = (n `mod` 2) == 1
 
 pytriples maxSide =
-     [ [a,b,c] | m <- [0..maxSide], 
+     [ [a,b,c] | m <- [0..maxSide],
                n <- [0..m-1],
                let a = m*m - n*n
                    b = 2 * m *n
@@ -157,9 +159,9 @@ pytriples maxSide =
                gcd m n == 1,
                isOdd (m - n)
              ]
-          
 
-pytriangles maxSide = 
+
+pytriangles maxSide =
   let pred = ((<=maxSide).maximum)
       relTriples = pytriples maxSide
       tripleFamily [a,b,c] = takeWhile pred $ map (\m -> [m*a,m*b,m*c]) [1..]
@@ -173,5 +175,3 @@ partitions' rf lst n m =
 
 partitions lst =
   f where f = memoNat2 (partitions' f lst)
-
-
