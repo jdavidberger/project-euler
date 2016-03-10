@@ -77,6 +77,7 @@ primeFactors n = factor n primes
 
 data NatTrie v = NatTrie (NatTrie v) v (NatTrie v)
 
+memo1 :: Integral a => (inp -> a) -> (a -> t) -> (t -> out) -> inp -> out
 memo1 arg_to_index index_to_arg f = (\n -> index nats (arg_to_index n))
   where nats = go 0 1
         go i s = NatTrie (go (i+s) s') (f (index_to_arg i)) (go (i+s') s')
