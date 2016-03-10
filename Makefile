@@ -4,7 +4,7 @@ default: all-answers
 
 answer/%: prob%/src/main.rs
 	cd prob$* && cargo build --release
-	@time -o $@.time -f %e timeout --foreground 60 ./prob$*/target/release/prob$* > $@
+	@time -o $@.time -f %e timeout --foreground 600 ./prob$*/target/release/prob$* > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
 bin/prob529: prob529.cc
@@ -27,22 +27,22 @@ bin/%: %.c
 
 answer/%: bin/prob%
 	@echo "Solving for $* (binary)"
-	@time -o $@.time -f %e timeout --foreground 60 ./$< > $@
+	@time -o $@.time -f %e timeout --foreground 600 ./$< > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
 answer/%: prob%.scala
 	@echo "Solving for $* (scala)"
-	@time -o $@.time -f %e timeout --foreground 60 scala ./$< > $@
+	@time -o $@.time -f %e timeout --foreground 600 scala ./$< > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
 answer/%: prob%.jl
 	@echo "Solving for $* (julia)"
-	@time -o $@.time -f %e timeout --foreground 120 julia $< > $@
+	@time -o $@.time -f %e timeout --foreground 1200 julia $< > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
 answer/%: prob%.py
 	@echo "Solving for $* (python)"
-	@time -o $@.time -f %e timeout --foreground 120 python2 $< > $@
+	@time -o $@.time -f %e timeout --foreground 1200 python2 $< > $@
 	@cat $@ $@.time | xargs printf "%s in %ss\n"
 
 problist:=$(shell ls -1 prob* | egrep -o "[0-9]*" | xargs -I{} printf "answer/%s " {})

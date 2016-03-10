@@ -33,7 +33,7 @@ prob86_naive limit =
         Set.toList $
         Set.unions $
         map f $ pytriangles (3*limit)
-  in traceShow (limit, count) $ count
+  in count
 
 -- Not particularly fast, but for the naive solution its fast enough...
 main = print $ binsearch' prob86_naive (10000)

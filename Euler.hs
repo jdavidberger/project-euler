@@ -4,10 +4,15 @@ import Data.Ratio
 import Data.List
 import qualified Data.Map as Map
 
-import Math.Combinatorics.Exact.Binomial
+--import Math.Combinatorics.Exact.Binomial
 
 (^!) x n = x^n
-  
+
+squares = (map (^2) [1..])
+
+isSquare ss =
+  ss == s*s where s = squareRoot ss
+
 squareRoot 0 = 0
 squareRoot 1 = 1
 squareRoot n =
@@ -43,6 +48,14 @@ divisorsPP pp =
 
 divisors n = takeWhile (<n) $ map product $ sequence
                     [take (k+1) $ iterate (p*) 1 | (p,k) <- primePowers n]
+
+binsearch_range f high =
+  let p = head $ filter ((>=high).f.(2^)) $ [1..] 
+  in (2^(p-1), 2^p)
+
+binsearch' f target =
+  let (mn,mx) = binsearch_range f target
+  in binsearch f target mn mx
 
 binsearch :: (Int -> Int) -> Int -> Int -> Int -> Int
 binsearch f target low high
@@ -126,4 +139,38 @@ prime_count =
   let f (n,_,c) = take n $ repeat (c-1) in
   concat $ map f $ scanl prime_count_iter (0,0,0) primes
 
-factorial n = product [1..n]                                                             
+factorial n = product [1..n]
+
+
+isEven n = (n `mod` 2) == 0
+isOdd n = (n `mod` 2) == 1
+
+pytriples maxSide =
+     [ [a,b,c] | m <- [0..maxSide], 
+               n <- [0..m-1],
+               let a = m*m - n*n
+                   b = 2 * m *n
+                   c = m*m + n*n,
+               a > 0 && b > 0 && c > 0,
+               isEven m || isEven n,
+               gcd m n == 1,
+               isOdd (m - n)
+             ]
+          
+
+pytriangles maxSide = 
+  let pred = ((<=maxSide).maximum)
+      relTriples = pytriples maxSide
+      tripleFamily [a,b,c] = takeWhile pred $ map (\m -> [m*a,m*b,m*c]) [1..]
+  in concat $ map tripleFamily relTriples
+
+partitions' rf lst 0 _ = 1
+partitions' rf lst n m =
+  let mylst = takeWhile (<=m) lst
+      f k = rf (n-k) k
+  in if n < 0 then 0 else sum $ map f mylst
+
+partitions lst =
+  f where f = memoNat2 (partitions' f lst)
+
+
