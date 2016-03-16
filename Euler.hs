@@ -54,11 +54,12 @@ binsearch_range f high =
   let p = head $ filter ((>=high).f.(2^)) $ [1..]
   in (2^(p-1), 2^p)
 
+binsearch' :: Integral a => (a -> a) -> a -> a
 binsearch' f target =
   let (mn,mx) = binsearch_range f target
   in binsearch f target mn mx
 
-binsearch :: (Int -> Int) -> Int -> Int -> Int -> Int
+binsearch :: Integral a => (a -> a) -> a -> a -> a -> a
 binsearch f target low high
   | high < low       = mid
   | val > target  = binsearch f target low (mid-1)
@@ -75,7 +76,6 @@ primeFactors n = factor n primes
         | p*p > n        = [n]
         | n `mod` p == 0 = p : factor (n `div` p) (p:ps)
         | otherwise      = factor n ps
-
 
 data NatTrie v = NatTrie (NatTrie v) v (NatTrie v)
 
@@ -95,6 +95,8 @@ memoNat :: Integral a => (a -> b) -> a -> b
 memoNat = memo1 id id
 
 memoNat2 f = memoNat (\n -> memoNat (f n))
+memoNat3 f = memoNat (\n -> memoNat2 (f n))
+memoNat4 f = memoNat (\n -> memoNat3 (f n))
 
 modProduct m =
   let pr a b =
@@ -138,12 +140,13 @@ frequency xs = (Map.fromListWith (+) [(x, 1) | x <- xs])
 prime_count_iter (n, last_prime, prime_count) p =
   ((p - last_prime), p, prime_count + 1)
 
+differences z = zipWith (-) (tail z) z
+
 prime_count =
   let f (n,_,c) = take (fromInteger n) $ repeat (c-1) in
   concat $ map f $ scanl prime_count_iter (0,0,0) primes
 
 factorial n = product [1..n]
-
 
 isEven n = (n `mod` 2) == 0
 isOdd n = (n `mod` 2) == 1
