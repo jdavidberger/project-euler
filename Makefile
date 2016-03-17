@@ -13,6 +13,9 @@ bin/prob529: prob529.cc
 bin/%.d: %.cc
 	@g++ -std=c++14 -Wall -g -O0 $< -o $@ 2>&1 > $@.log
 
+bin/%: %.ml
+	@ocamlopt $< -o $@ 2>&1 > $@.log
+
 bin/%: %.cc Euler.h
 	@g++ -std=c++14 -Wall -O3 $< -o $@ 2>&1 > $@.log
 
