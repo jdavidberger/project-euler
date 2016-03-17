@@ -1,32 +1,29 @@
-import random
+def combos(ls,n):
+    if n == 0:
+        return [[]]
+    rtn = []
+    for it in ls:
+        for ls2 in combos(ls, n-1):
+            ls2.append(it)
+            rtn.append(ls2)
+    return rtn
 
+def histogram(perm):
+    rtn = {}
+    for p in perm:
+        sp = sum(p)
+        rtn[sp] = 1 + rtn.get(sp, 0)
+    return rtn
 
-def round(dice, sides):
-    total = 0
-    for i in range(dice):
-        total += random.randrange(1,sides+1)
-    return total
+pete = histogram(combos(range(1,5), 9))
+cole = histogram(combos(range(1,7), 6))
 
-def prob205():
-    sm = 1
-    tot = 1
-    while True:
-        try:
-            sample_size = 100000
-#        tot += sample_size
-            pete = map( (lambda x: round(9,4)), range(sample_size))
-            cole = map( (lambda x: round(4,6)), range(sample_size))
-            for ps in pete:
-                for cs in cole:
-                    tot += 1
-                    if ps > cs:
-                        sm += 1
-        #       sm += len( filter( (lambda (x,y): x > y), games)
-            print str(sm / float(tot))
-        except:
-            print str(sm / float(tot))
-    return sm
-    
+played = 0
+wins = 0
+for pk in pete:
+    for ck in cole:
+        played += pete[pk] * cole[ck] 
+        if pk > ck:
+            wins += pete[pk] * cole[ck]
 
-if __name__=="__main__":
-    print str(prob205())
+print round(wins / float(played),7)
